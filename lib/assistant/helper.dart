@@ -1,5 +1,5 @@
 class Helper {
-  static String baseUrl = "https://happybuy.appsticit.com";
+  static String baseUrl = "https://happybuy.appsticit.com/";
   static String getAllCategoryListUrl = baseUrl + "getallcategory";
   static String getAllProductListUrl = baseUrl + "getallproductdata";
   static String getAllOrderSummeryListUrl = baseUrl + "getordersummary";

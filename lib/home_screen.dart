@@ -1,4 +1,7 @@
+import 'package:e_commerce_flutter/assistant/controller.dart';
+import 'package:e_commerce_flutter/assistant/helper.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,6 +16,7 @@ class _HomePageState extends State<HomePage> {
   late double displayHeight = MediaQuery.of(context).size.height;
   late double displayWidth = MediaQuery.of(context).size.width;
   String userName = "";
+  final _controller = Get.put(Controller());
   int item = 5;
 
 //   var PopularItemsData = [
@@ -107,7 +111,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     //getSharedPreferences();
     super.initState();
-    //getPopularPostData();
+    _controller.getAllCategoryList();
   }
 
   @override
@@ -135,9 +139,10 @@ class _HomePageState extends State<HomePage> {
                       //   MaterialPageRoute(builder: (context) => const ProfileScreen()),
                       // );
                     },
-                    child: const CircleAvatar(
-                      child: Image(image: AssetImage("images/img.jpeg")),
-                      //child: Image.network('https://www.freeiconspng.com/uploads/clipart--person-icon--cliparts-15.png'),
+                    child: CircleAvatar(
+                      //child: Image(image: AssetImage("images/img.jpeg")),
+                      child: Image.network(
+                          'https://www.freeiconspng.com/uploads/clipart--person-icon--cliparts-15.png'),
                       radius: 25, foregroundColor: Colors.blueGrey,
                     ),
                   )
@@ -164,47 +169,61 @@ class _HomePageState extends State<HomePage> {
                           )
                         ],
                       ),
-                      //Container(
-                      SizedBox(
-                        height: displayHeight * 0.20,
-                        // decoration: BoxDecoration(
-                        //   borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        //   color: Colors.orange[400],
-                        //   boxShadow: [
-                        //    BoxShadow(color: Colors.black.withAlpha(100), blurRadius: 10.0)
-                        // ),
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: item,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                children: [
-                                  Container(
-                                    height: displayHeight * 0.10,
-                                    width: displayHeight * 0.20,
-                                    child: Center(
-                                      child: Image.asset("images/icon.png"),
-                                    ),
-                                  ),
-                                  Container(
-                                    height: displayHeight * 0.06,
-                                    width: displayWidth * 0.20,
-                                    // ignore: prefer_const_constructors
-                                    child: Center(
-                                      child: const Text(
-                                        "Category title",
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
+                      Obx(() {
+                        if (_controller.loadingCategoryList.value) {
+                          return CircularProgressIndicator();
+                        } else {
+                          return Container(
+                            height: displayHeight * 0.20,
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0)),
+                                color: Colors.orange[400],
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.black.withAlpha(100),
+                                      blurRadius: 10.0)
+                                ]),
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: _controller.dataCategoryList.length,
+                                itemBuilder: (context, index) {
+                                  return Column(
+                                    children: [
+                                      Container(
+                                        height: displayHeight * 0.10,
+                                        width: displayHeight * 0.20,
+                                        child: Center(
+                                          child: Image.network(Helper.baseUrl +
+                                              _controller
+                                                  .dataCategoryList[index]
+                                                  .categoryImage
+                                                  .toString()),
                                         ),
-                                        textAlign: TextAlign.center,
                                       ),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }),
-                      ),
+                                      Container(
+                                        height: displayHeight * 0.06,
+                                        width: displayWidth * 0.20,
+                                        // ignore: prefer_const_constructors
+                                        child: Center(
+                                          child: Text(
+                                            _controller
+                                                .dataCategoryList[index].name
+                                                .toString(),
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }),
+                          );
+                        }
+                      }),
                     ],
                   ),
                 ),

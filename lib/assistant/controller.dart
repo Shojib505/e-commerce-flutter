@@ -36,7 +36,7 @@ class Controller extends GetxController {
         dataCategoryList.value = data;
       }
     } catch (e) {
-      print(e.toString() + "ERROR");
+      print(e.toString() + "error from cnotroller");
     } finally {
       loadingCategoryList(false).obs;
     }
