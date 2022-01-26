@@ -7,7 +7,8 @@ class ScreenSize {
   //static double blockSizeHorzontal = 0;
   //static double blockSizeVertical =0;
 
-  static double _safeAreaHorizontal = 0;
+  // ignore: unused_field
+  static double safeAreaHorizontal = 0;
   static double _safeAreaVertical = 0;
   //static double _safeBlockHorizontal =0;
   // static double _safeBlockVertical = 0;
@@ -23,7 +24,8 @@ class ScreenSize {
         _mediaQueryData.padding.left + _mediaQueryData.padding.right;
     double _safeBlockVertical =
         _mediaQueryData.padding.top + _mediaQueryData.padding.bottom;
-    _safeAreaHorizontal = (screenHeight - _safeBlockHorizontal) / 100;
+
+    safeAreaHorizontal = (screenHeight - _safeBlockHorizontal) / 100;
     _safeAreaVertical = (screenWidth - _safeBlockVertical) / 100;
   }
 }

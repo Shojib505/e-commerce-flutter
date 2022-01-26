@@ -25,6 +25,7 @@ class Controller extends GetxController {
   void init(BuildContext context) {
     getAllCategoryList();
     getAllProductList();
+    getAllSliderList();
 //    TASK TO COMPLETE THE OTHER FIVE CLASS
   }
 
@@ -36,7 +37,7 @@ class Controller extends GetxController {
         dataCategoryList.value = data;
       }
     } catch (e) {
-      print(e.toString() + "error from cnotroller");
+      print(e.toString() + "error controller category");
     } finally {
       loadingCategoryList(false).obs;
     }
@@ -45,14 +46,29 @@ class Controller extends GetxController {
   getAllProductList() async {
     try {
       loadingProductList(true).obs;
-      var data = await LoadAllApiData.fatchAllProductListData();
+      var data = await LoadAllApiData.fatchAllProductData();
+      print(data.toString() + "controller error list");
       if (data != null) {
         dataProductList.value = data;
       }
     } catch (e) {
-      print(e.toString() + "error from cnotroller");
+      print(e.toString() + "error controller product list");
     } finally {
       loadingProductList(false).obs;
+    }
+  }
+
+  getAllSliderList() async{
+    try {
+      loadingSliderList(true).obs;
+      var data = await LoadAllApiData.fatchAllSliderData();
+      if(data!=null){
+        dataSliderList.value=data;
+      }
+    } catch (e) {
+      print(e.toString()+"error controller slider list")
+    }finally{
+      loadingSliderList(false).obs;
     }
   }
 

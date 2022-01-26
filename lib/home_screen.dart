@@ -1,5 +1,6 @@
 import 'package:e_commerce_flutter/assistant/controller.dart';
 import 'package:e_commerce_flutter/assistant/helper.dart';
+import 'package:e_commerce_flutter/ui/detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -112,6 +113,7 @@ class _HomePageState extends State<HomePage> {
     //getSharedPreferences();
     super.initState();
     _controller.getAllCategoryList();
+    _controller.getAllProductList();
   }
 
   @override
@@ -259,15 +261,84 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 SizedBox(height: displayHeight * 0.01),
-
-                // build() the grid builder after the class
-
-                // Container(
-                //   height: displayHeight*0.8,
-                //   width: displayWidth,
-                //   mainAxisSpacing:5,
-
-                // )
+                Obx(() {
+                  if (_controller.loadingProductList.value) {
+                    return CircularProgressIndicator();
+                  } else {
+                    return Container(
+                        height: displayHeight * 0.8,
+                        width: displayWidth,
+                        //mainAxisSpacing:5,
+                        child: GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                          ),
+                          scrollDirection: Axis.vertical,
+                          itemCount: item,
+                          // _controller.dataProductList.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => DetailPage()));
+                              },
+                              child: Container(
+                                height: displayHeight * 0.15,
+                                width: displayWidth * 0.25,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Image(image: AssetImage("images/icon.png")),
+                                    // ClipRRect(
+                                    //   child: Image.network(
+                                    //       Helper.baseUrl +
+                                    //           _controller
+                                    //               .dataProductList[index].img1
+                                    //               .toString(),
+                                    //       fit: BoxFit.fill),
+                                    //   borderRadius: BorderRadius.circular(30),
+                                    // ),
+                                    SizedBox(height: 5),
+                                    Text("test name",
+                                        // _controller.dataProductList[index].name
+                                        //     .toString(),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                    SizedBox(height: 5),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "test of price",
+                                          // _controller
+                                          //     .dataProductList[index].sellingPrice
+                                          //     .toString(),
+                                          style: TextStyle(
+                                            decoration:
+                                                TextDecoration.lineThrough,
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                        Text(
+                                          "test price",
+                                          // _controller
+                                          //     .dataProductList[index].price
+                                          //     .toString()
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ));
+                  }
+                })
               ],
             ),
           )

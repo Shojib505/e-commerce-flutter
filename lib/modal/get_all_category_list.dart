@@ -1,5 +1,4 @@
 // To parse this JSON data, do
-//
 //     final getAllCategoryList = getAllCategoryListFromJson(jsonString);
 
 import 'package:meta/meta.dart';
