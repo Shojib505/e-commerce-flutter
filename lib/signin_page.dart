@@ -1,7 +1,7 @@
 import 'package:e_commerce_flutter/user_info.dart';
 import 'package:flutter/material.dart';
 
-import 'home_screen.dart';
+import 'ui/home_screen.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);

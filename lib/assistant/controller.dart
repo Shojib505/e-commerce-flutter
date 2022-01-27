@@ -58,16 +58,16 @@ class Controller extends GetxController {
     }
   }
 
-  getAllSliderList() async{
+  getAllSliderList() async {
     try {
       loadingSliderList(true).obs;
       var data = await LoadAllApiData.fatchAllSliderData();
-      if(data!=null){
-        dataSliderList.value=data;
+      if (data != null) {
+        dataSliderList.value = data;
       }
     } catch (e) {
-      print(e.toString()+"error controller slider list")
-    }finally{
+      print(e.toString() + "error controller slider list");
+    } finally {
       loadingSliderList(false).obs;
     }
   }

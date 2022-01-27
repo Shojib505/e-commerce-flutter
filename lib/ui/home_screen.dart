@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:e_commerce_flutter/assistant/controller.dart';
 import 'package:e_commerce_flutter/assistant/helper.dart';
 import 'package:e_commerce_flutter/ui/detail_page.dart';
@@ -114,6 +116,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _controller.getAllCategoryList();
     _controller.getAllProductList();
+    _controller.getAllSliderList();
   }
 
   @override
@@ -150,6 +153,37 @@ class _HomePageState extends State<HomePage> {
                   )
                 ],
               )),
+
+////////////////////////////////////Carosual // //////////////////////////
+
+          Container(
+            height: 300,
+            child: Obx(() {
+              if (_controller.loadingSliderList.value) {
+                return CircularProgressIndicator();
+              } else {
+                return CarouselSlider.builder(
+                    itemCount: _controller.dataSliderList.length,
+                    itemBuilder: (context, index, spIndex) {
+                      return ClipRRect(
+                        child: CachedNetworkImage(
+                            imageUrl: Helper.baseUrl +
+                                _controller.dataSliderList[index].sliderImage
+                                    .toString(),
+                            height: 300,
+                            fit: BoxFit.fill),
+                        borderRadius: BorderRadius.circular(10),
+                      );
+                    },
+                    options: CarouselOptions(
+                        autoPlay: true,
+                        height: 290,
+                        enlargeCenterPage: true,
+                        scrollDirection: Axis.horizontal,
+                        autoPlayAnimationDuration: Duration(seconds: 2)));
+              }
+            }),
+          ),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
@@ -157,6 +191,7 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   child: Column(
                     children: [
+                      // 'Categories' title row
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -171,6 +206,7 @@ class _HomePageState extends State<HomePage> {
                           )
                         ],
                       ),
+                      // 'Categories' dynamic item's
                       Obx(() {
                         if (_controller.loadingCategoryList.value) {
                           return CircularProgressIndicator();
@@ -186,43 +222,48 @@ class _HomePageState extends State<HomePage> {
                                       color: Colors.black.withAlpha(100),
                                       blurRadius: 10.0)
                                 ]),
-                            child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: _controller.dataCategoryList.length,
-                                itemBuilder: (context, index) {
-                                  return Column(
-                                    children: [
-                                      Container(
-                                        height: displayHeight * 0.10,
-                                        width: displayHeight * 0.20,
-                                        child: Center(
-                                          child: Image.network(Helper.baseUrl +
-                                              _controller
-                                                  .dataCategoryList[index]
-                                                  .categoryImage
-                                                  .toString()),
-                                        ),
-                                      ),
-                                      Container(
-                                        height: displayHeight * 0.06,
-                                        width: displayWidth * 0.20,
-                                        // ignore: prefer_const_constructors
-                                        child: Center(
-                                          child: Text(
-                                            _controller
-                                                .dataCategoryList[index].name
-                                                .toString(),
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            textAlign: TextAlign.center,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount:
+                                      _controller.dataCategoryList.length,
+                                  itemBuilder: (context, index) {
+                                    return Column(
+                                      children: [
+                                        Container(
+                                          height: displayHeight * 0.10,
+                                          width: displayHeight * 0.20,
+                                          child: Center(
+                                            child: Image.network(
+                                                Helper.baseUrl +
+                                                    _controller
+                                                        .dataCategoryList[index]
+                                                        .categoryImage
+                                                        .toString()),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  );
-                                }),
+                                        Container(
+                                          height: displayHeight * 0.06,
+                                          width: displayWidth * 0.20,
+                                          // ignore: prefer_const_constructors
+                                          child: Center(
+                                            child: Text(
+                                              _controller
+                                                  .dataCategoryList[index].name
+                                                  .toString(),
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }),
+                            ),
                           );
                         }
                       }),
@@ -275,15 +316,17 @@ class _HomePageState extends State<HomePage> {
                             crossAxisCount: 2,
                           ),
                           scrollDirection: Axis.vertical,
-                          itemCount: item,
-                          // _controller.dataProductList.length,
+                          itemCount: _controller.dataProductList.length,
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () {
+                                print(index.toString() + "INSIDE HOME");
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => DetailPage()));
+                                        builder: (context) => DetailPage(
+                                              itemIndex: index,
+                                            )));
                               },
                               child: Container(
                                 height: displayHeight * 0.15,
@@ -291,43 +334,55 @@ class _HomePageState extends State<HomePage> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Image(image: AssetImage("images/icon.png")),
-                                    // ClipRRect(
-                                    //   child: Image.network(
-                                    //       Helper.baseUrl +
-                                    //           _controller
-                                    //               .dataProductList[index].img1
-                                    //               .toString(),
-                                    //       fit: BoxFit.fill),
-                                    //   borderRadius: BorderRadius.circular(30),
-                                    // ),
+                                    // Image(image: AssetImage("images/icon.png")),
+                                    ClipRRect(
+                                      child: Image.network(
+                                          Helper.baseUrl +
+                                              _controller
+                                                  .dataProductList[index].img1
+                                                  .toString(),
+////////////////////////////////////CHANGE DYNAMIC DIVISE SIZE // //////////////////////////
+                                          height: 120,
+                                          width: 150,
+                                          fit: BoxFit.fill),
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
                                     SizedBox(height: 5),
-                                    Text("test name",
-                                        // _controller.dataProductList[index].name
-                                        //     .toString(),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
+                                    Text(
+                                      // "test name",
+                                      _controller.dataProductList[index].name
+                                          .toString(),
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      overflow: TextOverflow.fade,
+                                      maxLines: 1,
+                                      softWrap: true,
+                                    ),
                                     SizedBox(height: 5),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          "test of price",
-                                          // _controller
-                                          //     .dataProductList[index].sellingPrice
-                                          //     .toString(),
+                                          "Offer price: " +
+                                              _controller
+                                                  .dataProductList[index].price
+                                                  .toString(),
+                                          style: TextStyle(
+                                              color: Colors.red[400],
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          "Price :" +
+                                              _controller.dataProductList[index]
+                                                  .sellingPrice
+                                                  .toString(),
                                           style: TextStyle(
                                             decoration:
                                                 TextDecoration.lineThrough,
-                                            color: Colors.red,
+                                            color: Colors.blue,
                                           ),
-                                        ),
-                                        Text(
-                                          "test price",
-                                          // _controller
-                                          //     .dataProductList[index].price
-                                          //     .toString()
                                         )
                                       ],
                                     )
