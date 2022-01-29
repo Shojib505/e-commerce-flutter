@@ -8,10 +8,23 @@ class AddToCart extends StatefulWidget {
 }
 
 class _AddToCartState extends State<AddToCart> {
+  late double displayHeight = MediaQuery.of(context).size.height;
+  late double displayWidth = MediaQuery.of(context).size.width;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Text("Test"),
-    );
+        body: Column(
+      children: [
+        Container(
+          height: displayHeight * 07,
+          child: Container(
+            child: Text("data"),
+            // child: ListView.builder(itemBuilder: itemBuilder),
+          ),
+        ),
+        ElevatedButton(onPressed: () {}, child: Text("Buy"))
+      ],
+    ));
   }
 }

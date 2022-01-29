@@ -39,6 +39,7 @@ dependencies:
   get:
   carousel_slider:
   cached_network_image:
+  sqflite: ^2.0.2
 
 
 dev_dependencies:
