@@ -276,6 +276,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
+
           Container(
             decoration: const BoxDecoration(
               color: Color(0xFFF2F5F5),
